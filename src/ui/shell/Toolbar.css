@@ -1,0 +1,237 @@
+/*
+ * Top navigation, modelled on FMHY's: a full-width bar with the wordmark
+ * sitting above the sidebar column, a rounded search control carrying its
+ * shortcut badge, and trailing utility actions.
+ *
+ * Browser navigation (back / forward / reload) has no counterpart on the site
+ * and is placed ahead of the search control, where a browser user expects it.
+ */
+.navbar {
+  height: var(--toolbar-height);
+  flex: none;
+  display: flex;
+  align-items: center;
+  background: var(--bg-base);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.navbar__brand {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: 100%;
+  padding: 0 var(--space-5);
+  border-right: 1px solid var(--border-subtle);
+  transition: width var(--duration-base) var(--ease-out);
+}
+
+.navbar__mark {
+  display: grid;
+  place-items: center;
+  color: var(--text-primary);
+}
+
+.navbar__wordmark {
+  font-size: 15px;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.navbar__main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 0 var(--space-5);
+}
+
+.navbar__group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex: none;
+}
+
+.icon-button {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.icon-button:hover:not(:disabled) {
+  background: var(--fill-hover);
+  color: var(--text-primary);
+}
+
+.icon-button:disabled {
+  color: var(--text-disabled);
+}
+
+.icon-button--on {
+  color: var(--star);
+  background: var(--star-fill);
+}
+
+/* ---- search / address control ------------------------------------------ */
+.address {
+  flex: 1;
+  min-width: 0;
+  max-width: 720px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: 30px;
+  padding: 0 var(--space-3) 0 var(--space-4);
+  background: var(--bg-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    background var(--duration-fast) var(--ease-out);
+}
+
+.address:hover {
+  border-color: var(--border);
+}
+
+.address--focused {
+  background: var(--bg-base);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-fill);
+}
+
+.address__lead {
+  flex: none;
+  display: grid;
+  place-items: center;
+  color: var(--text-tertiary);
+}
+
+.address__lead--secure {
+  color: var(--success);
+}
+
+.address__lead--insecure {
+  color: var(--warning);
+}
+
+.address__input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  -webkit-user-select: text;
+  user-select: text;
+  cursor: text;
+}
+
+.address__input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.address__display {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 1px;
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent);
+}
+
+.address__host {
+  color: var(--text-primary);
+  font-weight: var(--weight-medium);
+}
+
+.address__path {
+  color: var(--text-tertiary);
+}
+
+.address__crumb {
+  color: var(--text-secondary);
+}
+
+.address__crumb-sep {
+  color: var(--text-disabled);
+  padding: 0 var(--space-2);
+}
+
+/* Shortcut badge, as on FMHY's search control. */
+.address__hint {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-base);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-medium);
+  color: var(--text-tertiary);
+}
+
+/* FMHY's own navigation links. Hidden on narrow windows, where the address
+   control and browser controls matter more. */
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex: none;
+}
+
+@media (max-width: 1160px) {
+  .navbar__links {
+    display: none;
+  }
+}
+
+.navbar__link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    background var(--duration-fast) var(--ease-out);
+}
+
+.navbar__link:hover {
+  color: var(--accent-text);
+  background: var(--fill-hover);
+}
+
+.navbar__link-emoji {
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* Blocking indicator: on is stated positively, off is simply quiet. */
+.icon-button--shield {
+  color: var(--success);
+  background: var(--success-fill);
+}
+
+.icon-button--shield:hover:not(:disabled) {
+  color: var(--success);
+  background: var(--success-fill);
+}

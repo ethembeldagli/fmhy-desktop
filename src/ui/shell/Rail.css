@@ -1,0 +1,218 @@
+/*
+ * Sidebar modelled on FMHY's own: a recessed column, emoji-led entries, and
+ * collapsible group headers. App-only destinations (favorites, history,
+ * downloads, settings) sit in their own group at the foot, styled identically
+ * so the column reads as one list.
+ */
+.rail {
+  flex: none;
+  width: var(--rail-width);
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-sunken);
+  border-right: 1px solid var(--border-subtle);
+  transition: width var(--duration-base) var(--ease-out);
+  overflow: hidden;
+}
+
+.rail--collapsed {
+  width: var(--rail-width-collapsed);
+}
+
+.rail__nav {
+  flex: 1;
+  min-height: 0;
+  padding: var(--space-6) var(--space-5) var(--space-8);
+}
+
+/* ---- group header ------------------------------------------------------- */
+.rail__group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: var(--space-7);
+  padding: var(--space-3) var(--space-2);
+  font-size: var(--text-base);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-snug);
+  color: var(--text-primary);
+  text-align: left;
+}
+
+.rail__group:first-child {
+  margin-top: 0;
+}
+
+.rail__group-chevron {
+  color: var(--text-tertiary);
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.rail__group-chevron--collapsed {
+  transform: rotate(-90deg);
+}
+
+/* ---- item --------------------------------------------------------------- */
+.rail-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  padding: var(--space-3) var(--space-2);
+  font-size: var(--text-base);
+  line-height: 1.45;
+  color: var(--text-secondary);
+  text-align: left;
+  border-radius: var(--radius-sm);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.rail--collapsed .rail-item {
+  justify-content: center;
+  padding: var(--space-3) 0;
+}
+
+.rail-item:hover {
+  color: var(--text-primary);
+}
+
+/* FMHY marks the current page with brand-coloured, heavier text. */
+.rail-item--active {
+  color: var(--accent-text);
+  font-weight: var(--weight-semibold);
+}
+
+.rail-item__emoji {
+  flex: none;
+  width: 18px;
+  font-size: 14px;
+  line-height: 1;
+  text-align: center;
+  /* Colour emoji should not pick up the text colour transition. */
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+
+.rail-item__label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rail-item__count {
+  flex: none;
+  font-size: var(--text-2xs);
+  color: var(--text-disabled);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- footer ------------------------------------------------------------- */
+.rail__footer {
+  flex: none;
+  padding: var(--space-4) var(--space-5);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.rail__disclaimer {
+  font-size: var(--text-2xs);
+  line-height: var(--leading-snug);
+  color: var(--text-disabled);
+}
+
+.rail__disclaimer strong {
+  font-weight: var(--weight-semibold);
+  color: var(--text-tertiary);
+}
+
+.rail__section {
+  margin-bottom: var(--space-2);
+}
+
+/*
+ * Legend card. FMHY explains its content markers at the foot of the sidebar
+ * and offers filters beside them, so the meaning of ⭐ / 🌐 / 🔄 is always in
+ * reach of the page using them.
+ */
+.legend {
+  margin: var(--space-8) 0 var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--bg-base);
+}
+
+.legend__title {
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-4);
+}
+
+.legend__title--sub {
+  margin-top: var(--space-6);
+}
+
+.legend__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  padding: var(--space-2) 0;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  text-align: left;
+}
+
+.legend__emoji {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background: var(--fill-hover);
+  font-size: 12px;
+}
+
+.legend__row--switch {
+  justify-content: space-between;
+  padding: var(--space-3) 0;
+}
+
+.legend__switch-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.switch {
+  flex: none;
+  position: relative;
+  width: 34px;
+  height: 19px;
+  border-radius: var(--radius-full);
+  background: var(--fill-active);
+  transition: background var(--duration-base) var(--ease-out);
+}
+
+.switch--on {
+  background: var(--accent);
+}
+
+.switch__knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.switch--on .switch__knob {
+  transform: translateX(15px);
+}

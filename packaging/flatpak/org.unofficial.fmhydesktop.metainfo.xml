@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.unofficial.fmhydesktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+
+  <name>FMHY Desktop</name>
+  <summary>Unofficial desktop client for FMHY</summary>
+
+  <description>
+    <p>
+      An unofficial, third-party desktop client for FMHY (FreeMediaHeckYeah).
+      It is not affiliated with, endorsed by, or an official product of FMHY.
+      All indexed content belongs to the FMHY project and its contributors.
+    </p>
+    <p>
+      The whole wiki is available offline-first, with full-text search across
+      every entry, favourites, browsing history and downloads. External links
+      open in an embedded browser built on the system's own web engine, so no
+      second browser engine is shipped.
+    </p>
+    <p>Includes:</p>
+    <ul>
+      <li>Full-text search over the entire FMHY index</li>
+      <li>Content blocking using the same filter lists uBlock Origin reads</li>
+      <li>In-page protection against popups, popunders and interstitials</li>
+      <li>Private browsing that keeps nothing on disk</li>
+      <li>Favourites, history and a downloads list</li>
+    </ul>
+  </description>
+
+  <launchable type="desktop-id">org.unofficial.fmhydesktop.desktop</launchable>
+  <provides>
+    <binary>fmhy-desktop</binary>
+  </provides>
+
+  <url type="homepage">https://github.com/ethembeldagli/fmhy-desktop</url>
+  <url type="bugtracker">https://github.com/ethembeldagli/fmhy-desktop/issues</url>
+
+  <developer id="io.github.ethembeldagli">
+    <name>FMHY Desktop contributors</name>
+  </developer>
+
+  <content_rating type="oars-1.1">
+    <content_attribute id="social-info">mild</content_attribute>
+  </content_rating>
+
+  <categories>
+    <category>Network</category>
+    <category>WebBrowser</category>
+  </categories>
+
+  <supports>
+    <control>keyboard</control>
+    <control>pointing</control>
+  </supports>
+
+  <releases>
+    <release version="0.1.0" date="2026-09-10">
+      <description>
+        <p>First packaged release.</p>
+      </description>
+    </release>
+  </releases>
+</component>

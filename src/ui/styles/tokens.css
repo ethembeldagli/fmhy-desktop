@@ -1,0 +1,238 @@
+/* ===========================================================================
+   FMHY Desktop — design tokens
+
+   The palette, brand colour and content typography follow the FMHY website so
+   the app reads as the same product. Values are taken from FMHY's own theme
+   (fmhy/edit, Apache-2.0): the default "swarm" brand scale, their near-black
+   dark ground, and VitePress's text/divider ramp which their theme inherits.
+
+   Structural tokens (spacing, radii, motion, layout) stay app-native — the
+   shell is a desktop application, not a web page, and needs denser chrome than
+   a documentation site.
+   =========================================================================== */
+
+:root {
+  /* ---- type ------------------------------------------------------------ */
+  --font-ui: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text",
+             "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Mono",
+               "Roboto Mono", Menlo, Consolas, monospace;
+
+  /* Desktop-app density: 13px base, not the 16px web default. */
+  --text-2xs: 10.5px;
+  --text-xs: 11.5px;
+  --text-sm: 12.5px;
+  --text-base: 13.5px;
+  --text-md: 15px;
+  --text-lg: 18px;
+  --text-xl: 22px;
+  --text-2xl: 28px;
+  --text-3xl: 36px;
+
+  /* Document text on FMHY pages matches the website rather than the
+     app chrome, which stays denser. */
+  --text-doc: 16px;
+  --leading-doc: 1.7;
+
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 680;
+
+  --leading-tight: 1.2;
+  --leading-snug: 1.35;
+  --leading-normal: 1.55;
+
+  /* Optical tracking: tighten as size grows. */
+  --tracking-tight: -0.018em;
+  --tracking-snug: -0.011em;
+  --tracking-normal: -0.004em;
+  --tracking-wide: 0.04em;
+
+  /* ---- spacing (4px scale) --------------------------------------------- */
+  --space-1: 2px;
+  --space-2: 4px;
+  --space-3: 6px;
+  --space-4: 8px;
+  --space-5: 12px;
+  --space-6: 16px;
+  --space-7: 20px;
+  --space-8: 24px;
+  --space-9: 32px;
+  --space-10: 40px;
+  --space-11: 56px;
+  --space-12: 72px;
+
+  /* ---- radii ----------------------------------------------------------- */
+  --radius-xs: 3px;
+  --radius-sm: 5px;
+  --radius-md: 7px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+  --radius-full: 999px;
+
+  /* ---- layout ---------------------------------------------------------- */
+  --tabstrip-height: 40px;
+  --toolbar-height: 44px;
+  --rail-width: 228px;
+  --rail-width-collapsed: 56px;
+
+  /* ---- motion ---------------------------------------------------------- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 110ms;
+  --duration-base: 170ms;
+  --duration-slow: 260ms;
+
+  --z-content: 10;
+  --z-toolbar: 20;
+  --z-dropdown: 60;
+  --z-overlay: 80;
+  --z-palette: 90;
+  --z-toast: 100;
+}
+
+/* ---- dark (default) -----------------------------------------------------
+   FMHY's dark ground is rgb(26,26,26) with rgb(23,23,23) for recessed
+   surfaces; text and dividers follow VitePress's translucent ramp. */
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg-base: #1a1a1a;
+  --bg-sunken: #171717;
+  --bg-surface: #202020;
+  --bg-raised: #262626;
+  --bg-overlay: #202020;
+
+  --fill-hover: rgba(255, 255, 255, 0.055);
+  --fill-active: rgba(255, 255, 255, 0.09);
+  --fill-selected: rgba(255, 255, 255, 0.07);
+
+  --border-subtle: rgba(82, 82, 89, 0.32);
+  --border: rgba(82, 82, 89, 0.48);
+  --border-strong: rgba(130, 130, 140, 0.55);
+
+  --text-primary: rgba(255, 255, 255, 0.87);
+  --text-secondary: rgba(235, 235, 245, 0.6);
+  --text-tertiary: rgba(235, 235, 245, 0.38);
+  --text-disabled: rgba(235, 235, 245, 0.24);
+
+  /* Brand: FMHY's "swarm" scale — 400 in dark, 500 in light. */
+  --accent: hsl(207, 65%, 68%);
+  --accent-hover: hsl(206, 65%, 78%);
+  --accent-text: hsl(207, 65%, 68%);
+  --accent-fill: hsla(207, 65%, 68%, 0.14);
+  --accent-fill-strong: hsla(207, 65%, 68%, 0.28);
+  --accent-contrast: rgb(42, 40, 47);
+  --selection-bg: hsl(220, 48%, 40%);
+
+  /* FMHY's own curated marker. */
+  --star: #f5b544;
+  --star-fill: rgba(245, 181, 68, 0.14);
+
+  --danger: hsl(0, 91%, 71%);
+  --danger-fill: hsla(0, 91%, 71%, 0.14);
+  --success: hsl(156, 59%, 52%);
+  --success-fill: hsla(158, 60%, 30%, 0.16);
+  --success-border: hsla(156, 59%, 42%, 0.4);
+  --warning: hsl(38, 92%, 62%);
+  --info: hsl(207, 65%, 68%);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.48);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.58);
+
+  --scrollbar-thumb: rgba(255, 255, 255, 0.16);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.26);
+}
+
+/* ---- light --------------------------------------------------------------- */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg-base: #ffffff;
+  --bg-sunken: #f6f6f7;
+  --bg-surface: #ffffff;
+  --bg-raised: #ffffff;
+  --bg-overlay: #ffffff;
+
+  --fill-hover: rgba(60, 60, 67, 0.05);
+  --fill-active: rgba(60, 60, 67, 0.09);
+  --fill-selected: rgba(60, 60, 67, 0.06);
+
+  --border-subtle: rgba(60, 60, 67, 0.12);
+  --border: rgba(60, 60, 67, 0.22);
+  --border-strong: rgba(60, 60, 67, 0.36);
+
+  --text-primary: rgb(60, 60, 67);
+  --text-secondary: rgba(60, 60, 67, 0.78);
+  --text-tertiary: rgba(60, 60, 67, 0.56);
+  --text-disabled: rgba(60, 60, 67, 0.36);
+
+  --accent: hsl(211, 63%, 61%);
+  --accent-hover: hsl(215, 57%, 53%);
+  --accent-text: hsl(218, 53%, 48%);
+  --accent-fill: hsla(211, 63%, 61%, 0.12);
+  --accent-fill-strong: hsla(211, 63%, 61%, 0.26);
+  --accent-contrast: rgb(42, 40, 47);
+  --selection-bg: hsl(208, 66%, 87%);
+
+  --star: #b8790a;
+  --star-fill: rgba(184, 121, 10, 0.13);
+
+  --danger: hsl(0, 72%, 51%);
+  --danger-fill: hsla(0, 72%, 51%, 0.1);
+  --success: hsl(160, 84%, 30%);
+  --success-fill: hsl(148, 71%, 96%);
+  --success-border: hsla(160, 70%, 35%, 0.35);
+  --warning: hsl(32, 81%, 39%);
+  --info: hsl(218, 53%, 48%);
+
+  --shadow-sm: 0 1px 2px rgba(60, 60, 67, 0.08);
+  --shadow-md: 0 4px 14px rgba(60, 60, 67, 0.1);
+  --shadow-lg: 0 16px 44px rgba(60, 60, 67, 0.16);
+
+  --scrollbar-thumb: rgba(60, 60, 67, 0.2);
+  --scrollbar-thumb-hover: rgba(60, 60, 67, 0.32);
+}
+
+/* Follow the OS when the user has not chosen explicitly. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
+    --bg-base: #ffffff;
+    --bg-sunken: #f6f6f7;
+    --bg-surface: #ffffff;
+    --bg-raised: #ffffff;
+    --bg-overlay: #ffffff;
+    --fill-hover: rgba(60, 60, 67, 0.05);
+    --fill-active: rgba(60, 60, 67, 0.09);
+    --fill-selected: rgba(60, 60, 67, 0.06);
+    --border-subtle: rgba(60, 60, 67, 0.12);
+    --border: rgba(60, 60, 67, 0.22);
+    --border-strong: rgba(60, 60, 67, 0.36);
+    --text-primary: rgb(60, 60, 67);
+    --text-secondary: rgba(60, 60, 67, 0.78);
+    --text-tertiary: rgba(60, 60, 67, 0.56);
+    --text-disabled: rgba(60, 60, 67, 0.36);
+    --accent: hsl(211, 63%, 61%);
+    --accent-hover: hsl(215, 57%, 53%);
+    --accent-text: hsl(218, 53%, 48%);
+    --accent-fill: hsla(211, 63%, 61%, 0.12);
+    --accent-fill-strong: hsla(211, 63%, 61%, 0.26);
+    --selection-bg: hsl(208, 66%, 87%);
+    --star: #b8790a;
+    --star-fill: rgba(184, 121, 10, 0.13);
+    --danger: hsl(0, 72%, 51%);
+    --danger-fill: hsla(0, 72%, 51%, 0.1);
+    --success: hsl(160, 84%, 30%);
+    --success-fill: hsl(148, 71%, 96%);
+    --success-border: hsla(160, 70%, 35%, 0.35);
+    --shadow-sm: 0 1px 2px rgba(60, 60, 67, 0.08);
+    --shadow-md: 0 4px 14px rgba(60, 60, 67, 0.1);
+    --shadow-lg: 0 16px 44px rgba(60, 60, 67, 0.16);
+    --scrollbar-thumb: rgba(60, 60, 67, 0.2);
+    --scrollbar-thumb-hover: rgba(60, 60, 67, 0.32);
+  }
+}

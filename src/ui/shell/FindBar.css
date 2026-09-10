@@ -1,0 +1,35 @@
+.findbar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: 36px;
+  padding: 0 var(--space-5);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  animation: findbar-in var(--duration-fast) var(--ease-out);
+}
+
+@keyframes findbar-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.findbar__input {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.findbar__input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.findbar__flip {
+  transform: rotate(180deg);
+}

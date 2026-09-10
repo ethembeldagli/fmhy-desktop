@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=FMHY Desktop
+GenericName=FMHY Client
+Comment=Unofficial desktop client for FMHY (FreeMediaHeckYeah)
+Exec=fmhy-desktop %U
+Icon=org.unofficial.fmhydesktop
+Terminal=false
+Categories=Network;WebBrowser;
+Keywords=fmhy;freemediaheckyeah;wiki;index;
+StartupNotify=true
+StartupWMClass=fmhy-desktop

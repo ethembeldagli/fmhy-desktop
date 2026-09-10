@@ -1,0 +1,12 @@
+node_modules
+dist
+dist-ssr
+*.local
+.DS_Store
+src-tauri/target
+src-tauri/gen
+.vite
+
+# Staged into the flatpak manifest by CI; not source.
+packaging/flatpak/*.deb
+.flatpak-builder/

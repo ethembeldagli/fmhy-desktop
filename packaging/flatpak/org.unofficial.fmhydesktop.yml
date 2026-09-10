@@ -1,0 +1,71 @@
+# Flatpak manifest.
+#
+# Built from the .deb the Tauri bundler already produces rather than from
+# source: the app is a Rust/Node build and reproducing that inside a Flatpak
+# sandbox would mean vendoring every crate and npm package for the offline
+# builder, for a binary identical to the one the release job just made.
+#
+# Build locally with:
+#   flatpak-builder --user --install --force-clean build \
+#     packaging/flatpak/org.unofficial.fmhydesktop.yml
+#
+# The .deb must be beside this file as `fmhy-desktop.deb`; the release
+# workflow copies it there.
+#
+# runtime-version is the value most likely to need bumping over time — it is
+# pinned because the app needs the runtime's webkit2gtk-4.1, and a newer GNOME
+# runtime is where that eventually goes away.
+app-id: org.unofficial.fmhydesktop
+runtime: org.gnome.Platform
+runtime-version: '47'
+sdk: org.gnome.Sdk
+command: fmhy-desktop
+separate-locales: false
+
+finish-args:
+  # A browser needs the network and a GPU; everything else stays closed.
+  - --share=network
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --device=dri
+  - --socket=pulseaudio
+  # Downloads land in the user's own download folder and nowhere else.
+  - --filesystem=xdg-download
+  - --talk-name=org.freedesktop.Notifications
+
+modules:
+  - name: fmhy-desktop
+    buildsystem: simple
+    build-commands:
+      # `ar`/`tar` rather than dpkg: the SDK has no dpkg, and the .deb is just
+      # an ar archive with a tarball inside.
+      - ar x fmhy-desktop.deb
+      - tar -xf data.tar.gz
+
+      - install -Dm755 usr/bin/fmhy-desktop /app/bin/fmhy-desktop
+
+      # Flatpak requires the desktop entry and AppStream data to be named for
+      # the app id, which the .deb's product-named files are not.
+      - install -Dm644 org.unofficial.fmhydesktop.desktop
+        /app/share/applications/org.unofficial.fmhydesktop.desktop
+      - install -Dm644 org.unofficial.fmhydesktop.metainfo.xml
+        /app/share/metainfo/org.unofficial.fmhydesktop.metainfo.xml
+
+      # Icons are renamed to the app id for the same reason.
+      - |
+        for dir in usr/share/icons/hicolor/*/apps; do
+          [ -d "$dir" ] || continue
+          size="$(basename "$(dirname "$dir")")"
+          src="$(find "$dir" -maxdepth 1 -type f | head -n 1)"
+          [ -n "$src" ] || continue
+          install -Dm644 "$src" \
+            "/app/share/icons/hicolor/$size/apps/org.unofficial.fmhydesktop.png"
+        done
+    sources:
+      - type: file
+        path: fmhy-desktop.deb
+      - type: file
+        path: org.unofficial.fmhydesktop.desktop
+      - type: file
+        path: org.unofficial.fmhydesktop.metainfo.xml

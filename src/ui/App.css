@@ -1,0 +1,40 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-base);
+}
+
+.app__body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.app__main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-surface);
+}
+
+/*
+ * The content viewport. For native FMHY pages this hosts React output; for web
+ * pages a native child webview is positioned exactly over this rect, so its
+ * measured geometry is what the Rust layer is told.
+ */
+.app__viewport {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.app__boot {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+}

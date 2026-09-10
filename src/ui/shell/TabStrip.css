@@ -1,0 +1,217 @@
+/*
+ * Tab strip. Sits in the titlebar region, so it is deliberately quiet: the
+ * strip is recessed and the active tab is raised out of it to meet the
+ * navigation bar below, which is what gives the window its layered look.
+ */
+.tabstrip {
+  height: var(--tabstrip-height);
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-1);
+  padding: 0 var(--space-3);
+  background: var(--bg-sunken);
+  border-bottom: 1px solid var(--border-subtle);
+  position: relative;
+  flex: none;
+}
+
+/* Reserve space for the native traffic lights on macOS. */
+.tabstrip__inset {
+  flex: none;
+  align-self: stretch;
+}
+
+.tabstrip__list {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding-bottom: 0;
+  overflow: hidden;
+}
+
+.tab {
+  --tab-fg: var(--text-secondary);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: 30px;
+  min-width: 0;
+  /* Sized to content rather than stretched: a lone tab should not span the
+     whole window the way a filled flex child would. */
+  flex: 0 1 210px;
+  max-width: 240px;
+  padding: 0 var(--space-3) 0 var(--space-4);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  color: var(--tab-fg);
+  background: transparent;
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.tab:hover {
+  background: var(--fill-hover);
+  --tab-fg: var(--text-primary);
+}
+
+/* The active tab rises out of the recessed strip and merges with the bar
+   below, so the two read as one surface. */
+.tab--active {
+  background: var(--bg-base);
+  --tab-fg: var(--text-primary);
+  box-shadow:
+    inset 0 1px 0 var(--border-subtle),
+    inset 1px 0 0 var(--border-subtle),
+    inset -1px 0 0 var(--border-subtle);
+}
+
+.tab--active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: var(--bg-base);
+}
+
+.tab--pinned {
+  flex: 0 0 38px;
+  min-width: 38px;
+  max-width: 38px;
+  justify-content: center;
+  padding: 0;
+}
+
+.tab--dragging {
+  opacity: 0.45;
+}
+
+.tab--drop-before {
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.tab--drop-after {
+  box-shadow: inset -2px 0 0 var(--accent);
+}
+
+.tab__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  color: var(--text-tertiary);
+}
+
+.tab--active .tab__icon {
+  color: var(--accent-text);
+}
+
+.tab__label {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-snug);
+  white-space: nowrap;
+  overflow: hidden;
+  /* Fade rather than ellipsis: keeps the strip calm when titles are long. */
+  mask-image: linear-gradient(to right, #000 calc(100% - 18px), transparent 100%);
+}
+
+.tab__close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-sm);
+  color: var(--text-tertiary);
+  opacity: 0;
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    background var(--duration-fast) var(--ease-out);
+}
+
+.tab:hover .tab__close,
+.tab--active .tab__close {
+  opacity: 1;
+}
+
+.tab__close:hover {
+  background: var(--fill-active);
+  color: var(--text-primary);
+}
+
+.tab__close:focus-visible {
+  opacity: 1;
+}
+
+/* Indeterminate ring shown in place of the icon while a page loads. */
+.tab__spinner {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent-fill-strong);
+  border-top-color: var(--accent);
+  animation: tab-spin 620ms linear infinite;
+}
+
+@keyframes tab-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.tabstrip__new {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-bottom: var(--space-2);
+  border-radius: var(--radius-md);
+  color: var(--text-tertiary);
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.tabstrip__new:hover {
+  background: var(--fill-hover);
+  color: var(--text-primary);
+}
+
+/* ---- window controls (Windows / Linux) --------------------------------- */
+.window-controls {
+  display: flex;
+  align-items: stretch;
+  align-self: stretch;
+  flex: none;
+  margin-right: calc(-1 * var(--space-3));
+}
+
+.window-controls__button {
+  width: 44px;
+  display: grid;
+  place-items: center;
+  color: var(--text-secondary);
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.window-controls__button:hover {
+  background: var(--fill-hover);
+  color: var(--text-primary);
+}
+
+.window-controls__button--close:hover {
+  background: #e5484d;
+  color: #fff;
+}

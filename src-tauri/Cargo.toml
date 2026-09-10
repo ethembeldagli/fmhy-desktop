@@ -1,0 +1,69 @@
+[package]
+name = "fmhy-desktop"
+version = "0.1.0"
+description = "An unofficial desktop client for FMHY (FreeMediaHeckYeah)"
+authors = ["FMHY Desktop contributors"]
+edition = "2021"
+rust-version = "1.77"
+
+[lib]
+name = "fmhy_desktop_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+# `unstable` unlocks multi-webview windows (Window::add_child / WebviewBuilder),
+# which is how content webviews are embedded inside the app shell.
+# `image-png` lets the window icon be swapped at runtime on Windows/Linux.
+tauri = { version = "2.11", features = ["unstable", "image-png"] }
+tauri-plugin-opener = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rusqlite = { version = "0.40", features = ["bundled"] }
+parking_lot = "0.12"
+thiserror = "2"
+url = "2"
+# rustls avoids an OpenSSL build dependency on Linux packaging.
+# Brave's ad-blocking engine: parses the same EasyList/uBO filter syntax uBO
+# uses, and converts it to the WebKit content-blocker format that both WKWebView
+# and WebKitGTK consume natively.
+adblock = { version = "0.13", default-features = false, features = ["content-blocking", "embedded-domain-resolver", "full-regex-handling"] }
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "gzip", "http2"] }
+
+# Reaching WebKit's content blocker needs the Objective-C bindings directly.
+# Versions are pinned to what Tauri already resolves, so no crate is duplicated.
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "0.6"
+block2 = "0.6"
+# Mouse side buttons never reach the webview, so they are caught with an
+# application-wide NSEvent monitor.
+objc2-app-kit = { version = "0.3", features = ["NSEvent", "NSResponder", "block2"] }
+objc2-foundation = { version = "0.3", features = ["NSError", "NSString"] }
+objc2-web-kit = { version = "0.3", features = [
+  "WKContentRuleList",
+  "WKContentRuleListStore",
+  "WKUserContentController",
+  "WKWebView",
+  "WKWebViewConfiguration",
+] }
+
+# WebKitGTK's content filter store has no safe bindings in the `webkit2gtk`
+# crate, so the raw FFI is used directly. Versions match what Tauri resolves.
+[target.'cfg(target_os = "linux")'.dependencies]
+webkit2gtk = { version = "2.0", features = ["v2_24"] }
+webkit2gtk-sys = { version = "2.0", features = ["v2_24"] }
+glib = "0.18"
+gio = "0.18"
+
+[features]
+# Enabled by `tauri dev`/`tauri build` to allow the dev-server origin.
+custom-protocol = ["tauri/custom-protocol"]
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+panic = "abort"
+strip = true

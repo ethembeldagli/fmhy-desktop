@@ -1,0 +1,17 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Permissions for the application shell (chrome) webview only. Content webviews hosting untrusted external sites are deliberately excluded from every capability below.",
+  "windows": ["main"],
+  "webviews": ["chrome"],
+  "permissions": [
+    "core:default",
+    "core:window:allow-start-dragging",
+    "core:window:allow-minimize",
+    "core:window:allow-toggle-maximize",
+    "core:window:allow-close",
+    "core:window:allow-is-maximized",
+    "core:event:default",
+    "opener:allow-open-url"
+  ]
+}
