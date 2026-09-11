@@ -148,6 +148,13 @@ mod imp {
     pub fn enable_swipe_gestures(_platform: &PlatformWebview) {}
 }
 
+/*
+ * Windows cannot be compiled from the machines this is usually developed on, so
+ * the CI build is what type-checks it. The signatures below come from
+ * `webview2-com-sys`'s generated `bindings.rs`, which is worth reading before
+ * changing anything here: WebView2's generated API mixes return values and
+ * out-parameters, and which one a given call uses is not guessable.
+ */
 #[cfg(windows)]
 mod imp {
     use tauri::webview::PlatformWebview;
@@ -169,9 +176,17 @@ mod imp {
 
     pub fn flags(platform: &PlatformWebview) -> Option<Flags> {
         let core = unsafe { platform.controller().CoreWebView2() }.ok()?;
+
+        // WebView2 reports these two through out-parameters rather than as
+        // return values, unlike GoBack/GoForward directly above.
+        let mut back = Default::default();
+        let mut forward = Default::default();
+        unsafe { core.CanGoBack(&mut back) }.ok()?;
+        unsafe { core.CanGoForward(&mut forward) }.ok()?;
+
         Some(Flags {
-            can_go_back: unsafe { core.CanGoBack() }.ok()?.as_bool(),
-            can_go_forward: unsafe { core.CanGoForward() }.ok()?.as_bool(),
+            can_go_back: back.as_bool(),
+            can_go_forward: forward.as_bool(),
         })
     }
 
