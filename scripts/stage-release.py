@@ -72,6 +72,12 @@ def main() -> None:
     staged = []
     for pattern in INSTALLERS:
         for path in sorted(artifacts.rglob(pattern)):
+            # An uploaded artifact arrives as a *directory* named after the
+            # artifact, with the real file inside — and the Flatpak job names
+            # its artifact "…-x86_64.flatpak", so the directory itself matches
+            # the glob. Only real files are assets.
+            if not path.is_file():
+                continue
             shutil.copy2(path, release / path.name)
             staged.append(path.name)
 
