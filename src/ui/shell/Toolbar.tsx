@@ -147,8 +147,15 @@ export function Toolbar({ platform }: { platform: PlatformInfo }) {
 
   return (
     <div className="navbar">
+      {/*
+        * A second place to grab the window. Deliberately only the brand block:
+        * the rest of this bar is buttons and an address field that is a plain
+        * div, and a drag region over that would swallow the click that focuses
+        * it rather than letting it through.
+        */}
       <div
         className="navbar__brand"
+        data-tauri-drag-region="deep"
         style={{
           width: collapsed ? 'var(--rail-width-collapsed)' : 'var(--rail-width)',
         }}

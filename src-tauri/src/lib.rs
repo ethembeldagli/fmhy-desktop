@@ -55,13 +55,29 @@ fn window_action(window: tauri::Window, action: String) -> Result<(), String> {
     result.map_err(|e| e.to_string())
 }
 
+/// Relaunch after an update has been staged.
+///
+/// The updater plugin writes the new version into place but leaves the running
+/// process alone, so something has to close it. Doing that here rather than
+/// through the process plugin keeps the capability surface as small as it
+/// already is — the chrome webview gets one more command, not a whole plugin.
+#[tauri::command]
+fn restart_app(app: tauri::AppHandle) {
+    app.restart();
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
+        // Updates are checked and installed from Settings, never silently:
+        // this is a client for someone else's wiki, and an app that replaces
+        // itself without asking has no business doing so.
+        .plugin(tauri_plugin_updater::Builder::new().build())
         .invoke_handler(tauri::generate_handler![
             app_info,
             window_action,
+            restart_app,
             platform::platform_info,
             browser::commands::browser_create,
             browser::commands::browser_navigate,

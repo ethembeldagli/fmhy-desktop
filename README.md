@@ -30,6 +30,19 @@ builds, so the first launch needs a nudge:
   `xattr -dr com.apple.quarantine "/Applications/FMHY Desktop.app"`
 - **Windows** — SmartScreen warns; choose More info, then Run anyway
 
+### Updating
+
+**Settings → Updates.** The app checks once at startup so it can tell you a release exists, and
+every step after that is a button — nothing downloads or installs on its own.
+
+Releases *are* signed for the updater, which is a separate thing from OS code signing: each build
+is signed with a key held by the maintainer and the app carries only the public half, so an update
+that was not signed with that key is rejected before any of it runs. The manifest is the release
+itself, so there is no update server to trust or keep running.
+
+Linux updates in place only from the AppImage. A `.deb`, `.rpm` or Flatpak install belongs to the
+package manager that put it there, and the app says so rather than failing obscurely.
+
 ---
 
 ## Architecture

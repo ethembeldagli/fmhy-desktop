@@ -1,6 +1,6 @@
 [package]
 name = "fmhy-desktop"
-version = "0.1.0"
+version = "0.2.0"
 description = "An unofficial desktop client for FMHY (FreeMediaHeckYeah)"
 authors = ["FMHY Desktop contributors"]
 edition = "2021"
@@ -19,6 +19,8 @@ tauri-build = { version = "2", features = [] }
 # `image-png` lets the window icon be swapped at runtime on Windows/Linux.
 tauri = { version = "2.11", features = ["unstable", "image-png"] }
 tauri-plugin-opener = "2"
+# In-app updates, verified against the public key in tauri.conf.json.
+tauri-plugin-updater = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 rusqlite = { version = "0.40", features = ["bundled"] }

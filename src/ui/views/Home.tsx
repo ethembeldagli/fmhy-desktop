@@ -7,6 +7,7 @@ import { useDataset } from '../../fmhy/store'
 import { FEATURES, HERO, HERO_ACTIONS, type HomeAction } from '../../fmhy/home'
 import { openExternal, type PlatformInfo } from '../../platform'
 import { SyncBanner } from './FmhyPage'
+import { UpdateBanner } from './UpdateBanner'
 import './views.css'
 import './Home.css'
 
@@ -28,6 +29,7 @@ export function Home({ platform }: { platform: PlatformInfo }) {
     <div className="home scroll">
       <div className="home__inner">
         <SyncBanner />
+        <UpdateBanner />
 
         <header className="hero">
           <div className="hero__text">

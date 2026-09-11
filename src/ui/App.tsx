@@ -21,6 +21,7 @@ import { useContentViews, useNavigation } from '../browser/contentViews'
 import { useDataset } from '../fmhy/store'
 import { useFavorites } from '../favorites/store'
 import { useAdblock } from '../browser/adblockStore'
+import { useUpdates } from '../updates/store'
 import { pageBySlug } from '../fmhy/catalog'
 import { getAppInfo, onEvent, type AppInfo } from '../platform'
 import './styles/tokens.css'
@@ -162,6 +163,14 @@ export function App() {
   useTheme()
   useShortcuts()
   useMouseNavigation()
+
+  // One quiet check at startup, so the app can say an update exists without
+  // anyone having gone looking. It downloads nothing and stays silent if the
+  // check itself fails — being offline is the usual reason.
+  const checkForUpdates = useUpdates((s) => s.check)
+  useEffect(() => {
+    void checkForUpdates({ silent: true })
+  }, [checkForUpdates])
 
   useEffect(() => {
     void getAppInfo().then(setApp)

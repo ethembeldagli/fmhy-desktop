@@ -17,6 +17,7 @@ import {
   type ShieldSettings,
 } from '../../platform'
 import { FMHY_SOURCES } from '../../fmhy/catalog'
+import { progressLabel, useUpdates } from '../../updates/store'
 import './views.css'
 import './Settings.css'
 
@@ -28,6 +29,7 @@ const SECTIONS = [
   'Downloads',
   'Privacy',
   'Shortcuts',
+  'Updates',
   'About',
 ] as const
 
@@ -51,6 +53,83 @@ function Field({
       {children && <div className="field__control">{children}</div>}
     </div>
   )
+}
+
+/**
+ * Updates panel.
+ *
+ * Two deliberate choices here. Nothing downloads until someone asks, and the
+ * restart is its own separate step — a staged update sits on disk harmlessly
+ * until the app is next closed anyway, so there is no reason to seize the
+ * window the moment it lands.
+ */
+function UpdatesPanel({ app }: { app: AppInfo }) {
+  const { status, version, notes, error, received, total } = useUpdates()
+  const check = useUpdates((s) => s.check)
+  const download = useUpdates((s) => s.download)
+  const restart = useUpdates((s) => s.restart)
+
+  const busy = status === 'checking' || status === 'downloading'
+  const progress = progressLabel(received, total)
+
+  return (
+    <div style={{ marginTop: 'var(--space-6)' }}>
+      <div className="notice">
+        <strong>Updates are signed.</strong> Each release is signed with a key held by the
+        maintainer, and the app carries only the public half — a download that was not signed
+        with that key is rejected before any of it runs. Nothing is installed without you
+        asking for it.
+      </div>
+
+      <div style={{ marginTop: 'var(--space-6)' }}>
+        <Field label="Current version" help={`FMHY Desktop ${app.version}`}>
+          <button className="button" onClick={() => void check()} disabled={busy}>
+            {status === 'checking' ? 'Checking…' : 'Check for updates'}
+          </button>
+        </Field>
+
+        {status === 'current' && (
+          <Field label="Up to date" help="You are running the newest release." />
+        )}
+
+        {status === 'available' && version && (
+          <Field
+            label={`Version ${version} is available`}
+            help={notes ? firstLine(notes) : 'A newer release has been published.'}
+          >
+            <button className="button" onClick={() => void download()}>
+              Download
+            </button>
+          </Field>
+        )}
+
+        {status === 'downloading' && (
+          <Field label="Downloading" help={progress ?? 'Fetching the update…'} />
+        )}
+
+        {status === 'ready' && (
+          <Field
+            label={version ? `Version ${version} is ready` : 'Update ready'}
+            help="It will be applied the next time the app starts."
+          >
+            <button className="button" onClick={() => void restart()}>
+              Restart now
+            </button>
+          </Field>
+        )}
+
+        {status === 'error' && error && (
+          <Field label="Update failed" help={error} />
+        )}
+      </div>
+    </div>
+  )
+}
+
+/** Release notes can be long; the panel shows only the opening line. */
+function firstLine(notes: string): string {
+  const line = notes.split('\n').find((l) => l.trim().length > 0)
+  return line ? line.trim() : notes
 }
 
 function Segmented<T extends string>({
@@ -437,6 +516,8 @@ export function Settings({ app, platform }: { app: AppInfo; platform: PlatformIn
               </tbody>
             </table>
           )}
+
+          {section === 'Updates' && <UpdatesPanel app={app} />}
 
           {section === 'About' && (
             <div style={{ marginTop: 'var(--space-6)' }}>

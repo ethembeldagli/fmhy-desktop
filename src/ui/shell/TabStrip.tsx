@@ -70,12 +70,19 @@ export function TabStrip({ platform }: { platform: PlatformInfo }) {
   }
 
   return (
-    <div className="tabstrip" data-tauri-drag-region ref={stripRef}>
+    /*
+     * "deep" rather than a bare attribute: bare means *only* direct clicks on
+     * this exact element drag the window, and `.tabstrip__list` is a flex child
+     * that covers the strip end to end — so there were no bare pixels left and
+     * the titlebar could not be grabbed at all. "deep" makes the whole subtree
+     * draggable, and Tauri still exempts buttons, links and anything carrying
+     * an interactive role, so tabs and the new-tab button keep working.
+     */
+    <div className="tabstrip" data-tauri-drag-region="deep" ref={stripRef}>
       {platform.trafficLightInset > 0 && (
         <div
           className="tabstrip__inset"
           style={{ width: platform.trafficLightInset }}
-          data-tauri-drag-region
         />
       )}
 
