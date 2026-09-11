@@ -173,9 +173,21 @@ cat > "$work/dmg.svg" <<SVG
         font-size="11" fill="#55555e">Unofficial third-party client. Not affiliated with FMHY.</text>
 </svg>
 SVG
-rsvg-convert -w 660 -h 400 "$work/dmg.svg" -o "$mac/dmg-background.png"
+# Rendered at 1x and 2x and combined into one multi-resolution TIFF. The
+# Finder lays a DMG background out in *points*, so a single 660x400 image is
+# scaled up on every Retina display and the text in it goes soft — which is
+# exactly what a plain PNG here looked like. tiffutil's -cathidpicheck refuses
+# the pair unless the second really is twice the first, so a mistake in these
+# numbers fails the build rather than shipping a blurry disk image.
+rsvg-convert -w 660 -h 400 "$work/dmg.svg" -o "$work/dmg-1x.png"
+rsvg-convert -w 1320 -h 800 "$work/dmg.svg" -o "$work/dmg-2x.png"
+tiffutil -cathidpicheck "$work/dmg-1x.png" "$work/dmg-2x.png" \
+  -out "$mac/dmg-background.tiff" >/dev/null
+rm -f "$mac/dmg-background.png"
 
 echo "wrote:"
-for f in "$win"/*.bmp "$mac"/dmg-background.png; do
+for f in "$win"/*.bmp; do
   printf '  %-44s %s\n' "${f#$root/}" "$(magick identify -format '%wx%h %m' "$f")"
 done
+printf '  %-44s %s\n' "${mac#$root/}/dmg-background.tiff" \
+  "$(magick identify -format '%wx%h %m ' "$mac/dmg-background.tiff" | tr -s ' ')"
